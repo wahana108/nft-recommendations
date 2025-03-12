@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NFT Recommendations</title>
+  <link rel="stylesheet" href="/style.css">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://*.google.com https://discord.com; img-src 'self' https://discord.com https://via.placeholder.com https://jmquwaybvruzxddsppc https://jmqwuaybvruzxddsppdh.supabase.co; frame-src 'self' http://localhost:3007 https://www.youtube.com;">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+  <style>
+    .nft-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .nft-image {
+      max-width: 150px;
+      max-height: 150px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+    button {
+      margin: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    input {
+      margin: 5px;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="login-form">
+    <h2>Login to NFT Recommendations</h2>
+    <input type="email" id="email" placeholder="Email" autocomplete="email"><br>
+    <input type="password" id="password" placeholder="Password" autocomplete="current-password"><br>
+    <button id="login-btn">Login</button>
+    <p>Belum punya akun? <a href="#" id="show-register-link">Create Account</a></p>
+  </div>
+  <div id="register-form" style="display: none;">
+    <h2>Create Account</h2>
+    <input type="email" id="reg-email" placeholder="Email" autocomplete="email"><br>
+    <input type="password" id="reg-password" placeholder="Password" autocomplete="new-password"><br>
+    <button id="register-btn">Register</button>
+    <p>Sudah punya akun? <a href="#" id="show-login-link">Login</a></p>
+  </div>
+  <div id="pool" style="display: none;">
+    <h1>NFT Recommendations</h1>
+    <nav>
+      <button id="logout-btn">Logout</button>
+    </nav>
+    <div id="recommendations"></div>
+    <h2>Actions for Top Vendors</h2>
+    <input type="number" id="nft-id" placeholder="NFT ID to Place/Replace" min="1"><br>
+    <button id="reward-btn" style="display: none;">Place Reward NFT</button>
+    <button id="profit-sharing-btn" style="display: none;">Initiate Profit Sharing</button>
+    <button id="confirm-profit-btn" style="display: none;">Confirm Profit Sharing</button>
+    <div id="action-result"></div>
+    <button id="confirm-sale-btn">Confirm Sale</button>
+  </div>
+  <script src="/script.js"></script>
+</body>
+</html>
