@@ -1,1 +1,1 @@
-"# NFT Buy Project" 
+"# NFT Recommendations Project" 
