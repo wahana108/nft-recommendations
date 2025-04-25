@@ -3,25 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>NFT Recommendations</title>
-  <link rel="stylesheet" href="/style.css">
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://*.google.com https://discord.com; img-src 'self' https://discord.com https://via.placeholder.com https://jmquwaybvruzxddsppc https://jmqwuaybvruzxddsppdh.supabase.co; frame-src 'self' http://localhost:3007 https://www.youtube.com;">
-  <!-- Tambahkan di dalam <head> untuk CSS -->
-<style>
-  .back-button {
-    padding: 8px 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 10px;
-  }
-  .back-button:hover {
-    background-color: #0056b3;
-  }
-</style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://*.google.com https://discord.com https://oqquvpjikdbjlagdlbhp.supabase.co; img-src 'self' https://discord.com https://via.placeholder.com https://oqquvpjikdbjlagdlbhp.supabase.co; frame-src 'self' https://www.youtube.com;">
   <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+    .back-button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    .back-button:hover { background-color: #0056b3; }
     .nft-card {
       border: 1px solid #ccc;
       padding: 10px;
@@ -46,13 +40,15 @@
       margin: 5px;
       padding: 5px;
     }
+    #login-form, #register-form, #pool { max-width: 400px; margin: 0 auto; }
+    h1, h2 { text-align: center; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
 </head>
 <body>
-  <!-- Tambahkan di dalam <body>, tepat setelah tag pembuka <body> -->
-<div style="text-align: center;">
-  <button id="back-to-mastermind" class="back-button">Back</button>
-</div>
+  <div style="text-align: center;">
+    <button id="back-to-mastermind" class="back-button">Back</button>
+  </div>
   <div id="login-form">
     <h2>Login to NFT Recommendations</h2>
     <input type="email" id="email" placeholder="Email" autocomplete="email"><br>
