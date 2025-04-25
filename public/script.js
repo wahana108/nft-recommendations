@@ -1,6 +1,6 @@
 console.log('script.js loaded');
 
-const supabase = window.supabase.createClient('https://jmqwuaybvruzxddsppdh.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptcXd1YXlidnJ1enhkZHNwcGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0MTUxNzEsImV4cCI6MjA1NTk5MTE3MX0.ldNdOrsb4BWyFRwZUqIFEbmU0SgzJxiF_Z7eGZPKZJg');
+const supabase = window.supabase.createClient('https://oqquvpjikdbjlagdlbhp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xcXV2cGppa2RiamxhZ2RsYmhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ5NTE4MDgsImV4cCI6MjA2MDUyNzgwOH0.ec28Q9VqiW2FomXESxVkiYswtWe6kJS-Vpc7W_tMsuU');
 let token = null;
 
 async function login(email, password) {
@@ -124,7 +124,7 @@ async function checkVendorStatus() {
     const { data: { user }, error } = await supabase.auth.getUser(token);
     if (error || !user) {
       console.error('Failed to get user data:', error?.message || 'No user');
-      showVendorActions(); // Tampilkan tombol untuk debugging
+      hideVendorActions();
       return;
     }
     const vendorId = user.id;
@@ -140,7 +140,7 @@ async function checkVendorStatus() {
     });
     if (!res.ok) {
       console.error('Fetch top vendors failed:', res.status);
-      showVendorActions(); // Tampilkan tombol untuk debugging
+      hideVendorActions();
       return;
     }
     const topVendors = await res.json();
@@ -171,7 +171,7 @@ async function checkVendorStatus() {
     }
   } catch (error) {
     console.error('Error in checkVendorStatus:', error.message);
-    showVendorActions(); // Tampilkan tombol untuk debugging
+    hideVendorActions();
   }
 }
 
@@ -179,12 +179,6 @@ function hideVendorActions() {
   document.getElementById('reward-btn').style.display = 'none';
   document.getElementById('profit-sharing-btn').style.display = 'none';
   document.getElementById('confirm-profit-btn').style.display = 'none';
-}
-
-function showVendorActions() {
-  document.getElementById('reward-btn').style.display = 'block';
-  document.getElementById('profit-sharing-btn').style.display = 'block';
-  document.getElementById('confirm-profit-btn').style.display = 'block';
 }
 
 async function placeRecommendation() {
@@ -297,36 +291,10 @@ async function confirmProfitSharingPrompt() {
   try {
     const transactionId = prompt('Enter Transaction ID to confirm profit sharing:');
     const nftIdToReplace = prompt('Enter NFT ID that was replaced:');
-    const buyerId = prompt('Enter Buyer ID (leave blank if same as vendor):');
-    const proofUrl = prompt('Enter Proof URL (leave blank if none):');
     if (!transactionId || !nftIdToReplace) return alert('Please enter both Transaction ID and NFT ID');
-    await confirmProfitSharing(transactionId, nftIdToReplace, buyerId || null, proofUrl || null);
+    await confirmProfitSharing(transactionId, nftIdToReplace);
   } catch (error) {
     console.error('Error in confirming profit sharing:', error.message);
-    document.getElementById('action-result').innerHTML = `<p>Error: ${error.message}</p>`;
-  }
-}
-
-async function confirmProfitSharing(transactionId, nftIdToReplace, buyerId, proofUrl) {
-  try {
-    console.log('Admin confirming profit sharing for transaction:', transactionId);
-    const res = await fetch('/confirm-profit-sharing', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ transaction_id: parseInt(transactionId), nft_id_to_replace: parseInt(nftIdToReplace), buyer_id: buyerId, proof_url: proofUrl })
-    });
-    if (!res.ok) {
-      if (res.status === 403) {
-        throw new Error('Only admins can confirm transactions. Please contact an admin.');
-      }
-      throw new Error(`Confirm failed: ${res.status}`);
-    }
-    const result = await res.text();
-    console.log('Profit sharing confirmed:', result);
-    document.getElementById('action-result').innerHTML = `<p>${result}</p>`;
-    loadRecommendations();
-  } catch (error) {
-    console.error('Error confirming profit sharing:', error.message);
     document.getElementById('action-result').innerHTML = `<p>Error: ${error.message}</p>`;
   }
 }
@@ -358,6 +326,7 @@ document.getElementById('show-login-link')?.addEventListener('click', (e) => {
 document.getElementById('logout-btn')?.addEventListener('click', logout);
 document.getElementById('reward-btn')?.addEventListener('click', placeRecommendation);
 document.getElementById('profit-sharing-btn')?.addEventListener('click', profitSharing);
+document.getElementById('confirm-profit-btn')?.addEventListener('click', confirmProfitSharingPrompt);
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM loaded');
@@ -375,12 +344,10 @@ document.addEventListener('DOMContentLoaded', () => {
     hideVendorActions();
   }
   document.getElementById('confirm-sale-btn')?.addEventListener('click', confirmSale);
-  // Logika untuk tombol Back (dipisahkan)
   const backButton = document.getElementById('back-to-mastermind');
   if (backButton) {
     backButton.addEventListener('click', () => {
       window.location.href = 'https://nft-mastermind.vercel.app';
     });
   }
-
 });
