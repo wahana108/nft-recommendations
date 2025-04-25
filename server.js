@@ -4,9 +4,9 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3007;
 
-const supabaseUrl = 'https://jmqwuaybvruzxddsppdh.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptcXd1YXlidnJ1enhkZHNwcGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0MTUxNzEsImV4cCI6MjA1NTk5MTE3MX0.ldNdOrsb4BWyFRwZUqIFEbmU0SgzJxiF_Z7eGZPKZJg';
-const supabase = createClient(supabaseUrl, supabaseKey, { auth: { autoRefreshToken: true, persistSession: true } });
+const supabaseUrl = 'https://oqquvpjikdbjlagdlbhp.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xcXV2cGppa2RiamxhZ2RsYmhwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NDk1MTgwOCwiZXhwIjoyMDYwNTI3ODA4fQ.cJri-wLQcDod3J49fUKesAY2cnghU3jtlD4BiuYMelw'; // Ganti dengan service_role key dari Supabase Dashboard
+const supabase = createClient(supabaseUrl, supabaseKey, { auth: { autoRefreshToken: false, persistSession: false } });
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -19,7 +19,6 @@ const authenticate = async (req, res, next) => {
   const { data: { user }, error } = await supabase.auth.getUser(token);
   if (error || !user) return res.status(401).send('Unauthorized');
   req.user = user;
-
   req.user.role = user.email === ADMIN_EMAIL ? 'admin' : 'vendor';
   next();
 };
@@ -60,7 +59,7 @@ app.get('/recommendations', authenticate, async (req, res) => {
     for (const rec of recs) {
       const { data: nft, error: nftError } = await supabase
         .from('nfts')
-        .select('id, title, description, vendor_id, price, image_url') // Sudah sesuai dengan tabel Anda
+        .select('id, title, description, vendor_id, price, image_url')
         .eq('id', rec.nft_id)
         .single();
       if (nftError) throw nftError;
@@ -72,7 +71,7 @@ app.get('/recommendations', authenticate, async (req, res) => {
         email: nft.description.split(' | ').pop() || rec.vendor_id,
         price: nft.price || 100000,
         added_at: rec.added_at,
-        image_url: nft.image_url || null // Menggunakan image_url yang ada
+        image_url: nft.image_url || null
       });
     }
 
@@ -214,7 +213,6 @@ app.post('/profit-sharing', authenticate, async (req, res) => {
   try {
     const { nft_id_to_replace, buyback_nft_id } = req.body;
     const vendorId = req.user.id;
-    let buybackError;
 
     console.log('Vendor initiating profit sharing for NFT:', buyback_nft_id, 'to replace:', nft_id_to_replace);
 
@@ -270,8 +268,7 @@ app.post('/profit-sharing', authenticate, async (req, res) => {
         proof_url: null,
         status: 'pending'
       });
-    buybackError = insertError;
-    if (buybackError) throw buybackError;
+    if (insertError) throw insertError;
 
     const { data: buybackCount, error: countError } = await supabase
       .from('buyback2')
